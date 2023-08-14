@@ -19,15 +19,15 @@
   "action": {
     "default_popup": "popup.html",
     "default_": {
-      "16": "cow/16.png",
-      "48": "cow/48.png",
-      "128": "cow/128.png"
+      "16": "images/16.png",
+      "48": "images/48.png",
+      "128": "images/128.png"
     }
   },
   "icons": {
-    "16": "cow/16.png",
-    "48": "cow/48.png",
-    "128": "cow/128.png"
+    "16": "images/16.png",
+    "48": "images/48.png",
+    "128": "images/128.png"
   },
   "manifest_key": "value"
 }
