@@ -1,63 +1,37 @@
-require("dotenv").config();
+// content.js
 
-chrome.action.onClicked.addListener(async (tab) => {
-  const currentUrl = tab.url;
+// Extract the search query from the current page's URL
+const currentUrl = window.location.href;
+const searchQuery = extractSearchQuery(currentUrl);
 
-  // Extract the search query from the URL
-  const searchQuery = extractSearchQuery(currentUrl);
-
-  // Call the OpenAI API to generate modified search terms
-  const modifiedSearchTerms = await generateModifiedSearchTerms(searchQuery);
-
-  // Construct the modified search URL
-  const modifiedUrl = constructModifiedUrl(currentUrl, modifiedSearchTerms);
-
-  // Open a new tab with the modified URL
-  chrome.tabs.create({ url: modifiedUrl });
+// Send a message to the background script to initiate API request
+chrome.runtime.sendMessage({
+  action: "generateModifiedSearchTerms",
+  searchQuery: searchQuery
 });
 
-async function generateModifiedSearchTerms(searchQuery) {
-  const apiKey = process.env.OPENAI_API_KEY;
-  const url = "https://api.openai.com/v1/engines/davinci/completions";
+// Listen for messages from the background script
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.modifiedSearchTerms) {
+    // Use the modified search terms to construct the modified URL
+    const modifiedSearchTerms = message.modifiedSearchTerms;
+    const modifiedUrl = constructModifiedUrl(currentUrl, modifiedSearchTerms);
 
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${apiKey}`,
-  };
+    // Open a new tab with the modified URL
+    chrome.tabs.create({ url: modifiedUrl });
+  }
+});
 
-  // Customize the input prompt based on the user's search query
-  const inputPrompt = `Enhance search results for YouTube query: ${searchQuery}`;
-
-  // Customize the options based on your requirements
-  const data = {
-    prompt: inputPrompt,
-    max_tokens: 50, // Adjust this value as needed
-  };
-
-  const response = await fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: JSON.stringify(data),
-  });
-
-  const result = await response.json();
-  return result.choices[0].text;
-}
-
-function constructModifiedUrl(originalUrl, modifiedSearchTerms) {
-  // Modify the URL using the generated search terms
-  // For example, you can replace spaces with plus signs for URL encoding
-  // Modify this logic based on your requirements
-  const encodedSearchTerms = encodeURIComponent(modifiedSearchTerms);
-
-  // Construct the new URL with the modified search terms
-  return originalUrl + "?q=" + encodedSearchTerms;
-}
-
+// Function to extract the search query from the URL
 function extractSearchQuery(url) {
-  // Extract the search query from the URL
   const urlObject = new URL(url);
   const searchParams = urlObject.searchParams;
   const searchQuery = searchParams.get("q");
   return searchQuery;
+}
+
+// Function to construct the modified URL
+function constructModifiedUrl(originalUrl, modifiedSearchTerms) {
+  const encodedSearchTerms = encodeURIComponent(modifiedSearchTerms);
+  return originalUrl + "?q=" + encodedSearchTerms;
 }

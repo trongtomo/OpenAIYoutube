@@ -1,33 +1,23 @@
 {
-  "manifest_version": 3,
-  "name": "No Red",
-  "version": "1.0",
-  "permissions": ["activeTab", "storage", "https://api.openai.com/*"],
-  "background": {
-    "scripts": ["background.js"],
-    "persistent": false
-  },
-  "content_scripts": [
-    {
-      "matches": ["https://www.youtube.com/*"],
-      "js": ["content.js"]
-    }
-  ],
-  "externally_connectable": {
-    "matches": ["https://www.youtube.com/*"]
-  },
-  "action": {
-    "default_popup": "popup.html",
-    "default_": {
+    "manifest_version": 3,
+    "name": "Hello World Extension",
+    "version": "1.0",
+    "permissions": ["activeTab"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "images/16.png",
+        "48": "images/48.png",
+        "128": "images/128.png"
+      }
+    },
+    "icons": {
       "16": "images/16.png",
       "48": "images/48.png",
       "128": "images/128.png"
     }
-  },
-  "icons": {
-    "16": "images/16.png",
-    "48": "images/48.png",
-    "128": "images/128.png"
-  },
-  "manifest_key": "value"
-}
+  }
+  
