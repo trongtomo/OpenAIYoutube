@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "No Red",
+  "version": "1.0",
+  "permissions": ["activeTab", "storage", "https://api.openai.com/*"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "externally_connectable": {
+    "matches": ["https://www.youtube.com/*"]
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_": {
+      "16": "cow/16.png",
+      "48": "cow/48.png",
+      "128": "cow/128.png"
+    }
+  },
+  "icons": {
+    "16": "cow/16.png",
+    "48": "cow/48.png",
+    "128": "cow/128.png"
+  },
+  "manifest_key": "value"
+}
