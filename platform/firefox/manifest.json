@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Hello World Extension",
     "version": "1.0",
-    "permissions": ["activeTab"],
+    "permissions": ["activeTab","storage"],
     "background": {
       "service_worker": "background.js"
     },
@@ -18,6 +18,12 @@
       "16": "images/16.png",
       "48": "images/48.png",
       "128": "images/128.png"
-    }
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://www.youtube.com/*"],
+        "js": ["content.js"]
+      }
+    ]
   }
   
